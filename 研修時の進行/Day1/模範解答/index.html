@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTools Elements 習熟度課題</title>
+    <!-- 課題として、問題のあるスタイルシートを読み込む -->
+    <link rel="stylesheet" href="style.css">
+    <!-- JSは実装済みとして読み込む (Console確認用) -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="header">
+        <h1>商品一覧画面 (DevTools課題)</h1>
+        <button class="cart-button">カートを見る (0)</button>
+    </div>
+
+    <div class="product-grid">
+        <!-- 課題対象のメインカード -->
+        <div class="product-card">
+
+            <!-- 課題1: タイトルの色がおかしい（詳細度チェック対象） -->
+            <div id="item-title-container">
+                <!-- 本来は.desired-redで赤くしたい -->
+                <h3 class="product-title desired-red">課題1: 商品タイトルA</h3>
+            </div>
+
+            <!-- 課題2: モバイルではみ出す画像（Device Modeと数値調整チェック対象） -->
+            <div class="product-image-container">
+                <img src="https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png" alt="商品画像"
+                    class="product-image">
+            </div>
+
+            <p class="product-price">価格: $100</p>
+
+            <!-- 課題3: ボタン配置がおかしい（DOM構造編集チェック対象） -->
+            <!-- NOTE: ここには意図的に flex 関連のクラスが付いていない -->
+            <div class="add-to-cart-container">
+                <button class="add-to-cart-button">カートに追加</button>
+            </div>
+        </div>
+
+        <!-- レイアウト確認用のダミーカード（課題対象外） -->
+        <div class="product-card">
+            <div id="item-title-container">
+                <h3 class="product-title desired-red">商品B</h3>
+            </div>
+            <div class="product-image-container">
+                <img src="https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png" alt="商品画像"
+                    class="product-image">
+            </div>
+            <p class="product-price">価格: $250</p>
+            <div class="add-to-cart-container"><button class="add-to-cart-button">カートに追加</button></div>
+        </div>
+
+    </div>
+</body>
+
+</html>

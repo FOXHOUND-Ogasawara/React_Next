@@ -1,0 +1,84 @@
+/* ベーススタイル */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f7f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------- */
+/* 課題1 修正 */
+/* -------------------- */
+
+/* 意図しない青色のスタイルを打ち消す、または削除する。
+ここでは、赤色を強制的に適用するように修正した例を示します。
+本来はstyle.cssから不要なセレクタを削除することが望ましいですが、
+DevTools上で!importantを外し、.desired-red (color: red) が適用されることを確認すればOKです。
+以下は、style.css内の該当箇所を修正する場合の例です。
+*/
+
+.desired-red {
+  color: red;
+}
+
+#item-title-container h3 {
+  font-size: 1.5rem;
+  margin-top: 0;
+}
+
+/* -------------------- */
+/* 課題2 修正 */
+/* -------------------- */
+/* Device Mode [2] で確認し、paddingが原因であると特定後、適切な値に修正 */
+.product-image-container {
+  padding: 8px;
+  text-align: center;
+}
+
+.product-image {
+  max-width: 100%;
+  height: 140px;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .product-image-container {
+    /* 過大なパディング 300px を適切な値 8px に修正 */
+    padding: 8px;
+  }
+}
+
+/* -------------------- */
+/* 課題3 修正 */
+/* -------------------- */
+/* Inspect機能 [2] で要素を特定し、Stylesパネル [3] で display: flex/justify-content を追加し、ボタンを右寄せに修正。
+これはHTML側でクラスを追加する方法もありますが、CSS側でレイアウトを修正する例です。
+*/
+.add-to-cart-container {
+  margin-top: auto;
+  /* ボタンを右寄せにするためのスタイルを追加 */
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,4 @@
+YOUR_PROJECT_NAME -> d1xfsyprm0n1ea.cloudfront.net
+
+API Key ↓
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTcyNjgyMDU2MiwiZXhwIjoyMDQyMzk2NTYyLCJpc3MiOiJzdXBhYmFzZSJ9.L5PXfGxR4Y1mO24c-9YszX5YJAUEHucpZdkS3qHAwaY

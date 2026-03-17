@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome DevTools 実践学習ページ</title>
+  <link rel="stylesheet" href="Devtool_Prototype.css">
+  <script src="Devtool_prototype.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🛠️ Chrome DevTools 実践学習ページ</h1>
+
+    <div class="intro">
+      <h3>🎯 ページ全体の目標</h3>
+      <p>Web開発において必須のツールである<strong>Chrome
+          DevTools</strong>の基本操作を習得します。特に「Elements」「Console」「Sources」を重点的に学び、他のパネルについても知っておくと便利なレベルで体験します。</p>
+    </div>
+
+    <!-- ============================================
+         導入：DevToolsの開き方とパネルの概要
+    ============================================ -->
+    <section id="intro">
+      <h2>📌 導入：DevToolsの開き方とパネルの概要</h2>
+
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong> まず、DevToolsを開いてみましょう！
+        <ul style="margin-top: 10px;">
+          <li><strong>Windows:</strong> <span class="shortcut-key">F12</span> または <span class="shortcut-key">Ctrl +
+              Shift + I</span></li>
+          <li><strong>Mac:</strong> <span class="shortcut-key">Cmd + Option + I</span></li>
+          <li><strong>または：</strong> 任意の要素を右クリック → 「検証」を選択</li>
+        </ul>
+      </div>
+
+      <div class="panel-info">
+        <h4>DevToolsの主要パネル</h4>
+        <ul>
+          <li><strong>Elements:</strong> HTML/CSSの構造確認・編集</li>
+          <li><strong>Console:</strong> JavaScript/TypeScriptのログ出力・エラー確認</li>
+          <li><strong>Sources:</strong> ブレークポイントを使ったデバッグ</li>
+          <li><strong>Network:</strong> 通信状況の確認</li>
+          <li><strong>Performance:</strong> 処理速度の記録と可視化</li>
+          <li><strong>Memory:</strong> メモリ使用量の追跡</li>
+          <li><strong>Application:</strong> ストレージやCookieの確認</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================
+         セクション 1：Inspect（要素の検証）
+    ============================================ -->
+    <section id="inspect">
+      <h2>🔍 セクション 1：Inspect（要素の検証）と Device Mode</h2>
+
+      <h3>1.1 Inspect (検証モードへの移行)</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong>
+        <ol style="margin-top: 10px;">
+          <li>DevTools左上の <strong>四角＋マウスカーソルのアイコン</strong> をクリック（または <span class="shortcut-key">Ctrl + Shift + C</span>）
+          </li>
+          <li>下のカラフルなボックスの上にマウスを乗せると、要素がハイライトされます</li>
+          <li>クリックすると、DevToolsの「Elements」タブに自動でジャンプします</li>
+        </ol>
+      </div>
+
+      <div class="demo-box highlight-target" id="inspect-title">
+        <h3>🎨 タイトル要素</h3>
+        <p>この要素を検証してみましょう！</p>
+      </div>
+
+      <div class="demo-box highlight-target" style="background: #ffe0b2;">
+        <button id="inspect-button">📱 ボタン要素</button>
+        <p style="margin-top: 10px;">このボタンも検証対象です</p>
+      </div>
+
+      <div class="demo-box highlight-target" style="background: #f3e5f5;">
+        <p id="inspect-text">📝 <strong>テキストブロック</strong>：この段落要素のHTML構造を確認してみましょう</p>
+      </div>
+
+      <h3>1.2 Device Mode（デバイス表示の切り替え）</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong>
+        <ol style="margin-top: 10px;">
+          <li>DevTools左上の <strong>スマホアイコン</strong> をクリック（または <span class="shortcut-key">Ctrl + Shift + M</span>）</li>
+          <li>上部に表示されるデバイス一覧から「iPhone 14 Pro」「iPad」「Pixel 7」などを選択</li>
+          <li>解像度や画面の回転を試してみましょう</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================
+         セクション 2：Elements（HTML/CSS構造の確認と編集）
+    ============================================ -->
+    <section id="elements">
+      <h2>📝 セクション 2：Elements（HTML/CSS構造の確認と編集）</h2>
+
+      <div class="instruction">
+        <strong>⚠️ 注意：</strong> ここでの変更は<strong>一時的</strong>なもので、ページをリロードすると元に戻ります。
+      </div>
+
+      <h3>2.1 HTML要素のリアルタイム編集</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong>
+        <ol style="margin-top: 10px;">
+          <li>下の見出しを「Inspect」で選択</li>
+          <li>Elementsパネル内でハイライトされた <code>&lt;h3&gt;</code> タグをダブルクリック（または <span class="shortcut-key">F2</span>）</li>
+          <li>テキストを「編集成功！」に変更してEnter</li>
+          <li>画面上の表示がリアルタイムで変わることを確認</li>
+        </ol>
+      </div>
+
+      <div class="editable-element">
+        <h3 id="editable-title">ここを編集してみよう</h3>
+        <p id="editable-paragraph">この段落も編集できます。DevToolsで自由に変更してください！</p>
+      </div>
+
+      <h3>2.2 スタイル（CSS）の検証と編集</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong>
+        <ol style="margin-top: 10px;">
+          <li>下のボックスを「Inspect」で選択</li>
+          <li>Elementsパネル右側の「Styles」タブを確認</li>
+          <li>練習操作1 <code>background: #ffebee;</code> を追加してみる</li>
+          <li>練習操作2 <code>padding: 30px;</code> に変更してみる</li>
+          <li>練習操作3 各プロパティ左側の「✓」チェックボックスをON/OFFして効果を確認</li>
+          <li>練習操作4<code>margin-bottom: 16px;</code> などの数値を選択し、<span class="shortcut-key">↑</span> <span
+              class="shortcut-key">↓</span> キーで値を変更（<span class="shortcut-key">Shift</span> で10倍速）</li>
+        </ol>
+      </div>
+
+      <div class="editable-element" id="style-target"
+        style="background: #e1f5fe; padding: 20px; margin-bottom: 16px; border-radius: 8px;">
+        <h4>スタイル編集ターゲット</h4>
+        <p>このボックスのCSS（背景色・padding・margin・border-radiusなど）を自由に変更してみましょう！</p>
+      </div>
+
+      <div class="panel-info">
+        <h4>💡 確認ポイント</h4>
+        <ul>
+          <li>複数のCSSルールが適用されている場合、詳細度の高いものが上に表示されます</li>
+          <li>打ち消し線が引かれているプロパティは、他のルールで上書きされています</li>
+          <li>CSSセレクタにカーソルを合わせると、影響を受ける要素が画面上でハイライトされます</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================
+         セクション 3：Console（ログ出力・エラー確認）
+    ============================================ -->
+    <section id="console">
+      <h2>🖥️ セクション 3：Console（ログ出力・エラー確認）</h2>
+
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong> DevToolsの「Console」タブを開いて、以下の操作を試してみましょう。
+      </div>
+
+      <h3>基本ログの確認</h3>
+      <button id="log-button">console.log() を出力</button>
+      <button id="warn-button">console.warn() を出力</button>
+      <button id="error-button" class="danger-btn">console.error() を出力</button>
+      <button id="clear-button">console.clear() でクリア</button>
+
+      <h3>Exam 1: 入力値の追跡</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong> テキストボックスに文字を入力し、Consoleで <code>console.log()</code> と <code>console.warn()</code>
+        の出力を確認しましょう。
+      </div>
+      <input type="text" id="input-tracker" placeholder="ここに入力すると...">
+      <p>入力した内容: <span id="display-input" style="color: #1a73e8; font-weight: bold;">（まだ入力されていません）</span></p>
+
+      <h3>Exam 2: 状態変化の追跡（カウンター）</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong> ボタンを押すたびに、Consoleで <code>[CounterComponent] +1 → [newVal]</code>
+        のような計算結果のログが出力されることを確認しましょう。
+      </div>
+      <div class="counter-display" id="counter-value">0</div>
+      <div style="text-align: center;">
+        <button id="increment-btn">➕ カウントアップ</button>
+        <button id="decrement-btn">➖ カウントダウン</button>
+        <button id="reset-btn" class="danger-btn">🔄 リセット</button>
+      </div>
+
+      <h3>Exam 3: 配列・オブジェクトの可視化</h3>
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong> ボタンをクリックすると、Consoleに <code>console.table()</code> で表形式のデータが出力されます。
+      </div>
+      <button id="add-user-btn">👤 メンバーを追加</button>
+      <button id="show-table-btn">📊 console.table() で表示</button>
+      <div id="user-list" style="margin-top: 15px;"></div>
+    </section>
+
+    <!-- ============================================
+         セクション 4：Sources（ブレークポイントとデバッグ）
+    ============================================ -->
+    <section id="sources">
+      <h2>🐛 セクション 4：Sources（ブレークポイントとデバッグ）</h2>
+
+      <div class="instruction">
+        <strong>✅ 実践タスク：</strong>
+        <ol style="margin-top: 10px;">
+          <li>DevToolsの「Sources」タブを開く</li>
+          <li>左ペインでこのHTMLファイルを探してクリック</li>
+          <li>下の <code>debugIncrement()</code> 関数の中の行番号（例：<code>const newVal = prev + 1;</code>）をクリックしてブレークポイントを設置</li>
+          <li>「デバッグ実行」ボタンをクリック</li>
+          <li>処理が停止したら、右側の「Scope」で変数 <code>prev</code> と <code>newVal</code> の値を確認</li>
+          <li>「Step over」ボタン（右上の ⤵ アイコン）で1行ずつ進める</li>
+          <li>「Resume」ボタン（▶ アイコン）で処理を続行</li>
+        </ol>
+      </div>
+
+      <pre><code>// デバッグ対象の関数
+function debugIncrement() {
+  const prev = debugCounter;
+  const newVal = prev + 1;  // ← ここにブレークポイントを設置
+  console.log('[Debug]', '+1 →', newVal);
+  debugCounter = newVal;
+  document.getElementById('debug-counter').textContent = debugCounter;
+}</code></pre>
+
+      <div class="counter-display" id="debug-counter">0</div>
+      <div style="text-align: center;">
+        <button id="debug-btn">🐛 デバッグ実行（ブレークポイントが作動します）</button>
+      </div>
+
+      <div class="panel-info">
+        <h4>💡 デバッグツールの使い方</h4>
+        <ul>
+          <li><strong>Resume (▶):</strong> 処理を続行（次のブレークポイントまで）</li>
+          <li><strong>Step over (⤵):</strong> 次の行に進む（関数内に入らない）</li>
+          <li><strong>Step into (↓):</strong> 関数の中に入る</li>
+          <li><strong>Step out (↑):</strong> 現在の関数から抜ける</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================
+         セクション 5：その他のパネル（簡易解説）
+    ============================================ -->
+    <section id="other-panels">
+      <h2>📚 セクション 5：その他の便利なパネル</h2>
+
+      <h3>5.1 Network（通信状況の確認）</h3>
+      <div class="panel-info">
+        <h4>確認ポイント</h4>
+        <table>
+          <tr>
+            <th>項目</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td><strong>フィルタ</strong></td>
+            <td>「Fetch/XHR」をクリックして、API通信だけを絞り込み表示</td>
+          </tr>
+          <tr>
+            <td><strong>Status</strong></td>
+            <td>200（成功）、404（URL間違い）、500（サーバーエラー）などを確認</td>
+          </tr>
+          <tr>
+            <td><strong>Headers</strong></td>
+            <td>リクエストURLやメソッド、パラメータを確認</td>
+          </tr>
+          <tr>
+            <td><strong>Response</strong></td>
+            <td>APIから返ってきたJSONなどのデータを確認</td>
+          </tr>
+        </table>
+      </div>
+      <button id="fetch-btn">🌐 ダミーAPIを呼び出す（Networkパネルで確認）</button>
+      <div id="fetch-result" style="margin-top: 10px;"></div>
+
+      <h3>5.2 Performance（処理速度の記録と可視化）</h3>
+      <div class="panel-info">
+        <h4>使い方</h4>
+        <ul>
+          <li><strong>記録開始:</strong> 「Record（●）」ボタンで計測開始</li>
+          <li><strong>記録停止:</strong> 操作後に「Stop」で計測終了</li>
+          <li><strong>CPUグラフ:</strong> 処理が重い部分（山の大きい部分）を特定</li>
+          <li><strong>Frames:</strong> フレーム描画の安定性（緑はOK、黄・赤は注意）</li>
+          <li><strong>Summary:</strong> 処理時間の内訳を確認（黄：Scripting、緑/青：描画）</li>
+        </ul>
+      </div>
+
+      <h3>5.3 Memory（メモリ使用量の追跡）</h3>
+      <div class="panel-info">
+        <h4>確認ポイント</h4>
+        <ul>
+          <li><strong>Heap snapshot:</strong> その瞬間のメモリ使用量を撮影</li>
+          <li><strong>Shallow Size:</strong> オブジェクト自体のメモリ量</li>
+          <li><strong>Retained Size:</strong> そのオブジェクトが保持している総メモリ量（大きい場合は要注意）</li>
+        </ul>
+      </div>
+
+      <h3>5.4 Application（データ保存場所の確認）</h3>
+      <div class="panel-info">
+        <h4>確認ポイント</h4>
+        <ul>
+          <li><strong>Local Storage:</strong> ブラウザに保存された一時データ</li>
+          <li><strong>Session Storage:</strong> タブを閉じると消えるデータ</li>
+          <li><strong>Cookies:</strong> ログイン状態などを維持するデータ</li>
+        </ul>
+      </div>
+      <button id="storage-btn">💾 Local Storageにデータを保存</button>
+      <button id="show-storage-btn">👁️ 保存されたデータを表示</button>
+      <div id="storage-result" style="margin-top: 10px; font-weight: bold; color: #1a73e8;"></div>
+    </section>
+
+    <div class="intro" style="margin-top: 40px;">
+      <h3>🎉 お疲れ様でした！</h3>
+      <p>Chrome DevToolsの基本操作を体験できましたか？実際の開発では、これらのツールを使いこなすことで効率的にデバッグやパフォーマンス改善ができるようになります。</p>
+      <p><strong>次のステップ:</strong> 実際のプロジェクトでDevToolsを使って、HTML/CSSの調整やJavaScriptのデバッグに挑戦してみましょう！</p>
+    </div>
+  </div>
+</body>
+
+</html>

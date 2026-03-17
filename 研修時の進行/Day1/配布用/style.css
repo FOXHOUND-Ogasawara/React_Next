@@ -1,0 +1,76 @@
+/* ベーススタイル */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f7f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------- */
+/* 課題1: CSSの詳細度による色の上書き (バグ) */
+/* -------------------- */
+
+/* 本来は赤くしたいスタイル (詳細度が低い) */
+.desired-red {
+  color: red;
+}
+
+/* 意図しないスタイル (IDセレクタと!importantで詳細度を高くし、赤を上書きしている) [1] */
+#item-title-container h3 {
+  color: blue !important;
+  font-size: 1.5rem;
+  margin-top: 0;
+}
+
+/* -------------------- */
+/* 課題2: モバイルレイアウト崩れ (バグ) */
+/* -------------------- */
+.product-image-container {
+  padding: 8px;
+  text-align: center;
+}
+
+.product-image {
+  max-width: 100%;
+  height: 140px;
+  object-fit: contain;
+}
+
+/* モバイル用の崩れたスタイル設定（600px以下で画像がはみ出す大きなパディングを設定） [2] */
+@media (max-width: 600px) {
+  .product-image-container {
+    /* 過大なパディングによりレイアウト崩れを引き起こす */
+    padding: 0 300px;
+  }
+}
+
+/* -------------------- */
+/* 課題3: DOM構造起因のレイアウト崩れ (バグ) */
+/* -------------------- */
+.add-to-cart-container {
+  /* 右寄せに必要な flex や justify-content が意図的に抜けている状態 */
+  margin-top: auto;
+  text-align: left; /* 左寄せのまま */
+}
