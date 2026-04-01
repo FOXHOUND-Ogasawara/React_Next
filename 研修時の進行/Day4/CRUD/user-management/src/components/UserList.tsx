@@ -24,14 +24,38 @@ const UserList: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const fetchUsers = () => {
-    // TODO: fetchを用いて 'GET /api/users' からユーザー一覧を取得し、setUsers にデータをセットする処理を実装してください
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('ユーザー一覧の取得に失敗しました:', error);
+    }
   };
 
-  const addUser = () => {
-    // TODO: fetchを用いて 'POST /api/users' へ新しいユーザー情報を送信する処理を実装してください
-    // 送信するデータ(body)の例: JSON.stringify({ name: name, email: email })
-    // 成功したら、フォームを空にして fetchUsers() を呼び出し一覧を更新してください
+  const addUser = async () => {
+    if (!name || !email) return;
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setName("");
+      setEmail("");
+      fetchUsers();
+    } catch (error) {
+      console.error('ユーザーの登録に失敗しました:', error);
+    }
   };
 
   useEffect(() => {

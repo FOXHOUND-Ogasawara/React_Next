@@ -15,18 +15,53 @@ const UserEdit: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const fetchUser = () => {
-    // TODO: fetchを用いて 'GET /api/users/:id' を呼び出し、取得したユーザー情報を state（user, name, email）にセットする処理を実装してください
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUser(data);
+      setName(data.name);
+      setEmail(data.email);
+    } catch (error) {
+      console.error('ユーザーの取得に失敗しました:', error);
+    }
   };
 
-  const updateUser = () => {
-    // TODO: fetchを用いて 'PUT /api/users/:id' へユーザーの更新情報を送信する処理を実装してください
-    // 成功したら navigate("/") を使い、一覧画面へ遷移してください
+  const updateUser = async () => {
+    if (!name || !email || !user) return;
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      navigate("/");
+    } catch (error) {
+      console.error('ユーザーの更新に失敗しました:', error);
+    }
   };
 
-  const deleteUser = () => {
-    // TODO: fetchを用いて 'DELETE /api/users/:id' を呼び出し、ユーザーの削除処理を実装してください
-    // 成功したら navigate("/") を使い、一覧画面へ遷移してください
+  const deleteUser = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      navigate("/");
+    } catch (error) {
+      console.error('ユーザーの削除に失敗しました:', error);
+    }
   };
 
   useEffect(() => {
