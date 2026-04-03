@@ -5,75 +5,62 @@ import { useNavigate, useParams } from "react-router-dom";
 interface User {
   id: number;
   name: string;
-  age: number;
+  email: string;
 }
-
-const url = "https://d1xfsyprm0n1ea.cloudfront.net/rest/v1/sample_users";
-const apikey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTcyNjgyMDU2MiwiZXhwIjoyMDQyMzk2NTYyLCJpc3MiOiJzdXBhYmFzZSJ9.L5PXfGxR4Y1mO24c-9YszX5YJAUEHucpZdkS3qHAwaY";
 
 const UserEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [name, setName] = useState("");
-  const [age, setAge] = useState<number | string>("");
+  const [email, setEmail] = useState("");
 
-  const fetchUser = () => {
-    fetch(url + `?id=eq.${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: apikey,
-        Prefer: "return=representation",
-      },
-    })
-      .then((response) => response.json())
-      .then((data: User[]) => {
-        console.log(data);
-        if (data.length > 0) {
-          setUser(data[0]);
-          setName(data[0].name);
-          setAge(data[0].age);
-        } else {
-          console.log("ユーザーが見つかりません");
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const updateUser = () => {
-    if (name && age && user) {
-      fetch(url + `?id=eq.${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: apikey,
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({
-          name: name,
-          age: age,
-        }),
-      })
-        .then(() => navigate("/"))
-        .catch((error) => console.error("更新できませんでした", error));
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUser(data);
+      setName(data.name);
+      setEmail(data.email);
+    } catch (error) {
+      console.error('ユーザーの取得に失敗しました:', error);
     }
   };
 
-  const deleteUser = () => {
-    if (user) {
-      fetch(url + `?id=eq.${id}`, {
-        method: "PATCH",
+  const updateUser = async () => {
+    if (!name || !email || !user) return;
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
-          apikey: apikey,
-          Prefer: "return=representation",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ deleted: true }),
-      })
-        .then(() => navigate("/"))
-        .catch((error) => console.error("削除に失敗しました", error));
+        body: JSON.stringify({ name, email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      navigate("/");
+    } catch (error) {
+      console.error('ユーザーの更新に失敗しました:', error);
+    }
+  };
+
+  const deleteUser = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      navigate("/");
+    } catch (error) {
+      console.error('ユーザーの削除に失敗しました:', error);
     }
   };
 
@@ -81,7 +68,7 @@ const UserEdit: React.FC = () => {
     fetchUser();
   }, [id]);
 
-  if (!user) {
+  if (!user && !name) {
     return <Typography>読み込み中...</Typography>;
   }
 
@@ -98,9 +85,9 @@ const UserEdit: React.FC = () => {
           sx={{ mr: 2 }}
         />
         <TextField
-          label="年齢"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
+          label="メールアドレス"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{ mr: 2 }}
         />
         <Button variant="contained" color="primary" onClick={updateUser}>

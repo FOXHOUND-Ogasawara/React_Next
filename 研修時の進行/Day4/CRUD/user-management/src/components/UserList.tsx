@@ -1,10 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
-  Grid,
-  MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -16,122 +12,56 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+// PostgreSQLのカラム構成に合わせたUserの型定義
 interface User {
   id: number;
   name: string;
-  age: number;
-  deleted?: boolean;
+  email: string;
 }
 
 const UserList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [name, setName] = useState("");
-  const [age, setAge] = useState<number | "">("");
-  const [deleted, setDeleted] = useState<boolean>(false);
-  const [sorted, setSorted] = useState<string>("asc");
+  const [email, setEmail] = useState("");
 
-  const DEFAULT_URL =
-    "https://d1xfsyprm0n1ea.cloudfront.net/rest/v1/sample_users";
-  const [url, setUrl] = useState<string>(
-    DEFAULT_URL + `?deleted=eq.false&order=id.asc`
-  );
-  const APIKEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTcyNjgyMDU2MiwiZXhwIjoyMDQyMzk2NTYyLCJpc3MiOiJzdXBhYmFzZSJ9.L5PXfGxR4Y1mO24c-9YszX5YJAUEHucpZdkS3qHAwaY";
-
-  const fetchUsers = () => {
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: APIKEY,
-        Prefer: "return=representation",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error(error));
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('ユーザー一覧の取得に失敗しました:', error);
+    }
   };
 
-  function buildUrl(): string {
-    let retUrl: string = "";
-    let secDeleted = "";
-    let secSorted = "";
-    console.log(deleted, sorted);
-
-    // default
-    if (!deleted && sorted === "asc") {
-      retUrl = DEFAULT_URL + `?deleted=eq.false&order=id.asc`;
-
-      return retUrl;
-    }
-
-    // isDeleted
-    if (!deleted) {
-      secDeleted = "deleted=eq.false";
-    }
-
-    //isSorted
-    if (sorted === "asc") {
-      secSorted = "order=id.asc";
-    } else {
-      secSorted = "order=id.desc";
-    }
-
-    // build
-    if (secDeleted != "" && secSorted != "") {
-      retUrl = DEFAULT_URL + "?" + secDeleted + "&" + secSorted;
-    } else if (secDeleted != "") {
-      retUrl = DEFAULT_URL + "?" + secDeleted;
-    } else if (secSorted != "") {
-      retUrl = DEFAULT_URL + "?" + secSorted;
-    }
-
-    return retUrl;
-  }
-
-  const handleDeleted = () => {
-    setDeleted(deleted ? false : true);
-  };
-
-  const sortChange = (e) => {
-    setSorted(e.target.value);
-  };
-
-  const addUser = () => {
-    if (name && age) {
-      fetch(DEFAULT_URL, {
-        method: "POST",
+  const addUser = async () => {
+    if (!name || !email) return;
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          apikey: APIKEY,
-          Prefer: "return=representation",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: name,
-          age: age,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data: User[]) => {
-          console.log(data);
-          setName("");
-          setAge("");
-          fetchUsers();
-        })
-        .catch((error) => {
-          alert("登録に失敗");
-          console.error(error);
-        });
+        body: JSON.stringify({ name, email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setName("");
+      setEmail("");
+      fetchUsers();
+    } catch (error) {
+      console.error('ユーザーの登録に失敗しました:', error);
     }
   };
 
   useEffect(() => {
+    // コンポーネントのマウント時にユーザー一覧を取得
     fetchUsers();
-  }, [url]);
-
-  useEffect(() => {
-    setUrl(buildUrl());
-  }, [deleted, sorted]);
+  }, []);
 
   return (
     <Box>
@@ -146,47 +76,27 @@ const UserList: React.FC = () => {
           sx={{ mr: 2 }}
         />
         <TextField
-          label="年齢"
-          type="number"
-          value={age}
-          onChange={(e) => setAge(Number(e.target.value))}
+          label="メールアドレス"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{ mr: 2 }}
         />
         <Button variant="contained" color="primary" onClick={addUser}>
           追加
         </Button>
       </Box>
+
       <Typography variant="h5" gutterBottom>
         ユーザー一覧
       </Typography>
-      <Grid container>
-        <div>
-          <Checkbox
-            checked={deleted}
-            onChange={handleDeleted}
-            inputProps={{ "aria-label": "controlled" }}
-            id="deleted"
-          />
-          <label htmlFor="deleted">削除済ユーザーを含む</label>
-        </div>
-        <Select
-          labelId="sort"
-          id="sort"
-          value={sorted}
-          label="Id"
-          onChange={sortChange}
-        >
-          <MenuItem value={"asc"}>昇順</MenuItem>
-          <MenuItem value={"desc"}>降順</MenuItem>
-        </Select>
-      </Grid>
 
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>名前</TableCell>
-            <TableCell>年齢</TableCell>
+            <TableCell>メールアドレス</TableCell>
             <TableCell>操作</TableCell>
           </TableRow>
         </TableHead>
@@ -195,7 +105,7 @@ const UserList: React.FC = () => {
             <TableRow key={user.id}>
               <TableCell>{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
-              <TableCell>{user.age}</TableCell>
+              <TableCell>{user.email}</TableCell>
               <TableCell>
                 <Button
                   variant="outlined"
