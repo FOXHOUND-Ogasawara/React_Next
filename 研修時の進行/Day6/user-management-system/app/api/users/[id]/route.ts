@@ -68,7 +68,7 @@ export async function PUT(
   }
 }
 
-// ユーザーの削除
+// ユーザーの論理削除（deleted = true に更新）
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -76,7 +76,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     const result = await pool.query(
-      "DELETE FROM users WHERE id = $1 RETURNING *",
+      "UPDATE users SET deleted = true WHERE id = $1 RETURNING *",
       [id]
     );
 
@@ -87,7 +87,7 @@ export async function DELETE(
       );
     }
 
-    return NextResponse.json({ message: "ユーザーを削除しました" });
+    return NextResponse.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     return NextResponse.json(
